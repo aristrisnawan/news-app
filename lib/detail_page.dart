@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:news/article.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class ArticleDetailPage extends StatelessWidget {
   static const routeName = 'article_detail';
@@ -40,7 +41,10 @@ class ArticleDetailPage extends StatelessWidget {
                   SizedBox(height: 10,),
                   RaisedButton(
                     child: Text('Read More'),
-                    onPressed: (){},
+                    onPressed: (){
+                      Navigator.pushNamed(context, ArticleWebView.routeName,
+                          arguments: article.url);
+                    },
                   )
 
                 ],
@@ -48,6 +52,25 @@ class ArticleDetailPage extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class ArticleWebView extends StatelessWidget {
+  static const routeName = '/article_web';
+
+  final String url;
+
+  const ArticleWebView({@required this.url});
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('News app'),
+      ),
+      body: WebView(
+        initialUrl: url,
       ),
     );
   }

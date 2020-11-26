@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:news/article.dart';
 import 'package:news/detail_page.dart';
 import 'article.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+
 
 void main() {
   runApp(MyApp());
@@ -24,7 +24,10 @@ class MyApp extends StatelessWidget {
         NewsListPage.routeName: (context) => NewsListPage(),
         ArticleDetailPage.routeName: (context) => ArticleDetailPage(
           article: ModalRoute.of(context).settings.arguments,
-        )
+        ),
+        ArticleWebView.routeName: (context) => ArticleWebView(
+          url: ModalRoute.of(context).settings.arguments,
+        ),
       },
     );
   }
@@ -57,9 +60,6 @@ class NewsListPage extends StatelessWidget {
 
 Widget _buildArticleItem (BuildContext context, Article article){
   return ListTile(
-    onTap: (){
-      Navigator.pushNamed(context, ArticleDetailPage.routeName, arguments: article);
-    },
     contentPadding: const EdgeInsets.symmetric(horizontal: 16.0,vertical: 8.0),
     leading: Image.network(
       article.urlToImage,
@@ -67,24 +67,9 @@ Widget _buildArticleItem (BuildContext context, Article article){
     ),
     title: Text(article.title),
     subtitle: Text(article.author),
+    onTap: (){
+      Navigator.pushNamed(context, ArticleDetailPage.routeName, arguments: article);
+    },
   );
 }
 
-class ArticleWebView extends StatelessWidget {
-  static const routeName = '/article_web';
-
-  final String url;
-
-  const ArticleWebView({@required this.url});
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('News app'),
-      ),
-      body: WebView(
-        initialUrl: url,
-      ),
-    );
-  }
-}
